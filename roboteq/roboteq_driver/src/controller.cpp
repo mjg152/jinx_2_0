@@ -168,15 +168,19 @@ void Controller::processStatus(std::string str) {
       return;
     }
 
-    if (fields.size() != 8) {
+    if (fields.size() != 10) {
       ROS_WARN("Wrong number of status fields. Dropping message.");
       return;
     }
 
     msg.fault = boost::lexical_cast<int>(fields[2]);
     msg.status = boost::lexical_cast<int>(fields[3]);
+    msg.internal_voltage = boost::lexical_cast<float>(fields[4]);
+    msg.adc_voltage = boost::lexical_cast<float>(fields[5]);
     msg.ic_temperature = boost::lexical_cast<int>(fields[6]);
-    msg.DIN_1 = boost::lexical_cast<bool>(fields[7]);
+    msg.ros_enabled = boost::lexical_cast<bool>(fields[7]);
+    msg.estop = boost::lexical_cast<bool>(fields[8]);
+    msg.batt_voltage = boost::lexical_cast<float>(fields[9]);
   } catch (std::bad_cast& e) {
     ROS_WARN("Failure parsing status data. Dropping message.");
     return;

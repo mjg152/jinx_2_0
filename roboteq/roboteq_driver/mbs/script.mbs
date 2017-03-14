@@ -114,5 +114,7 @@ PrintStatus:
 	print(":", getvalue(_VOLTS, 3))
 	print(":", getvalue(_TEMP, 1))
 	print(":", getvalue(_DIN, 3))
+	print(":", getvalue(_DIN, 6))
+	print(":", getvalue(_VOLTS, 2))
 	print("\r")
 	Return

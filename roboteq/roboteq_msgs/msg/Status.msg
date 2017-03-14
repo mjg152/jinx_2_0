@@ -27,5 +27,12 @@ float32 ic_temperature
 float32 internal_voltage
 float32 adc_voltage
 
-#Status of DIN1 , utilized to monitor contactor status / estop status
-bool DIN_1
+#Status of DIN3 , utilized to monitor ros_enabled switch 
+bool ros_enabled
+
+#Status of DIN6 , utilized to monitor e_stop switch 
+bool estop
+
+#Status of Battery Voltag, this is not channel dependend so should exist here 
+#As opposed to in channel feedback like it exists in the stock roboteq driver
+float32 batt_voltage
