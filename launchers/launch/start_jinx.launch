@@ -1,0 +1,23 @@
+<launch>
+
+  <node name = "converter" pkg = "convert_twist" type = "convert_twist"/>
+  <rosparam command="load" file="$(find cwru_configs)/$(optenv ROBOT sim)/base/base.yaml" />
+  
+  <node pkg="sicktoolbox_wrapper" type="sicklms" name="base_laser1" respawn="true">  
+      <param name="resolution" type="double" value="1.0" />
+      <param name="port" type="string" value="/dev/ttyUSB0" />    
+      <param name="frame_id" type="string" value="/base_laser1_link" />
+	  <param name="baud" type="int" value="500000" />
+  </node>
+  
+  <node pkg="roboteq_driver" type="driver_node" name="roboteq_driver" output="screen">
+    <param name="port" value="/dev/ttyACM0" />
+    <param name="value" value="115200" />
+    <param name="channels" value = "2"/>
+  </node>
+  
+  <node name = "encoder_publisher" pkg = "phidgets" type = "encoder"/>
+  
+  <node pkg="tf" type="static_transform_publisher" name="base_laser1_broadcaster" args="0.2159 0 0.53975 0 0 0 base base_laser1_link 100" />
+	 
+</launch>

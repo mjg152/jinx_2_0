@@ -40,7 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Link to generated source from Microbasic script file.
 extern const char* script_lines[];
-extern const int script_ver = 29;
+extern const int script_ver = 30;
 
 namespace roboteq {
 
@@ -180,7 +180,7 @@ void Controller::processStatus(std::string str) {
     msg.ic_temperature = boost::lexical_cast<int>(fields[6]);
     msg.ros_enabled = boost::lexical_cast<bool>(fields[7]);
     msg.estop = boost::lexical_cast<bool>(fields[8]);
-    msg.batt_voltage = boost::lexical_cast<float>(fields[9]);
+    msg.batt_voltage = boost::lexical_cast<float>(fields[9]) / 10.0;
   } catch (std::bad_cast& e) {
     ROS_WARN("Failure parsing status data. Dropping message.");
     return;

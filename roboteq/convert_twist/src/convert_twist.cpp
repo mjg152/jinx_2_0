@@ -26,6 +26,7 @@ geometry_msgs::Twist g_last_sent_cmd;
 geometry_msgs::Twist g_last_received_cmd;
 
 bool g_dig1_status; 
+bool g_estop_status; 
 
 
 void twistCallback(const geometry_msgs::Twist& message_holder) 
@@ -36,8 +37,8 @@ void twistCallback(const geometry_msgs::Twist& message_holder)
 
 void statusCallback(const roboteq_msgs::Status& message_holder) 
 {	
-	g_dig1_status = message_holder.DIN_1;	
-	ROS_INFO("We're in the twist callback and received this for DIN_1 %u", g_dig1_status); 
+	g_dig1_status = message_holder.ros_enabled;	
+	g_estop_status = message_holder.estop;	
 	
 }
 

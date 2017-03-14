@@ -1,4 +1,4 @@
-SCRIPT_VER=29
+SCRIPT_VER=30
 MAX_CHANNELS=2
 Dim last_mode[2] as Integer
 
