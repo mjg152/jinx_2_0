@@ -1,0 +1,55 @@
+<launch>
+
+ <!-- twist to roboteq interface, e-stop, generic robot setup -->
+
+	<node name = "converter" pkg = "convert_twist" type = "convert_twist"/>
+	<rosparam command="load" file="$(find cwru_configs)/$(optenv ROBOT sim)/base/base.yaml" />
+	
+ <!-- LIDAR -->
+
+	<node pkg="sicktoolbox_wrapper" type="sicklms" name="base_laser1" respawn="true">  
+	  <param name="resolution" type="double" value="1.0" />
+	  <param name="port" type="string" value="/dev/ttyUSB0" />    
+	  <param name="frame_id" type="string" value="/base_laser1_link" />
+	  <param name="baud" type="int" value="500000" />
+	</node>
+		
+  <!-- roboteq driver -->
+
+	<node pkg="roboteq_driver" type="driver_node" name="roboteq_driver" output="screen">
+	<param name="port" value="/dev/ttyACM0" />
+	<param name="value" value="115200" />
+	<param name="channels" value = "2"/>
+	</node>
+
+  <!-- wheel encoders  -->
+  
+	<node name = "encoder_publisher" pkg = "phidgets" type = "encoder"/>
+  
+  <!-- static transforms  -->
+	<node pkg="tf" type="static_transform_publisher" name="base_laser1_broadcaster" args="0.2159 0 0.53975 0 0 0 base base_laser1_link 100" />
+	<node name="from_torso_to_camera_link_static_tf" pkg="tf" type="static_transform_publisher" args="0.217 -0.015 0.813 0.015 0.638 0.009 0.770 base camera_link 50" /> 
+
+  <!-- Kinect -->
+  
+	<remap from="/camera/depth_registered/points" to="/kinect/depth/points" />
+	<include file="$(find freenect_launch)/launch/freenect.launch" />
+
+  <!-- odometry -->
+	<node pkg="phidgets" type="odometry" name="odometry" respawn="true" output="screen">
+		<!-- phidget device topics for the left and right encoders -->
+		<param name="right_topic_path" value="phidgets/encoder1" />
+		<param name="left_topic_path" value="phidgets/encoder0" />
+		<!-- frequency of odom updates in Hz -->		
+		<param name="frequency" value="50" />
+		<!-- separation between the two wheels in millimetres -->
+		<param name="wheelbase" value="562.5" />
+		<!-- number of encoder counts per millimetre for the left wheel -->
+		<param name="countspermmleft" value="100" />
+		<!-- number of encoder counts per millimetre for the right wheel -->
+		<param name="countspermmright" value="100" />
+		<!-- whether to show additional info -->
+		<param name="verbose" value="true" />
+	</node>
+    
+</launch>
