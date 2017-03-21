@@ -1,0 +1,13 @@
+﻿"Symbol";"Value";"Unit";
+"TraceParts.PartNumber";"10-11022016-088542";"";
+"REFERENCE";"PYB15-Q24-S5-T";"";
+"TraceParts.PartTitle";"PYB15-T Series - 15 W, 4:1 Input Range, Single/Dual Regulated Output, 1,500 Vdc Isolation, Dc-Dc Converter";"";
+"TraceParts.InstanceId";"10-11022016-088542DWLOFDFRD0NBZCS8XYJERA9ZE";"";
+"DESIGN";"5 Vdc, 3 A, 15 W, 9~36 Vdc Input Range";"";
+"TraceParts.PartStatus";"Published";"";
+"TraceParts.PartStatusId";"";"";
+"SUPPLIER";"CUI";"";
+"TraceParts.PartVersion";"1.0.3";"";
+"TRACEPARTS";"TRACEPARTS";"";
+"TraceParts.PartLanguage";"en";"";
+"TraceParts.ClassPath";"CUI:10-11022016-088542";"";
