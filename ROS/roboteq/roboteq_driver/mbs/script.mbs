@@ -1,6 +1,9 @@
 SCRIPT_VER=30
 MAX_CHANNELS=2
 Dim last_mode[2] as Integer
+Dim mosfetFailure As Boolean
+Dim voltageCounter As Integer
+voltageCounter = 250 'Start counters for voltage counter
 
 ' Mode values are:
 '  -1 stopped
@@ -39,8 +42,8 @@ for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
 	setconfig(_ATRIG, ch, 600) ' max amps rating in datasheet 
 
 	' Max acceleration/deceleration (p219)
-	setconfig(_MAC, ch, 10000) 'max acceleration limits * 10
-	setconfig(_MDEC, ch, 10000) 'max deceleration limits * 10
+	setconfig(_MAC, ch, 5000) 'max acceleration limits * 10
+	setconfig(_MDEC, ch, 5000) 'max deceleration limits * 10
 next
 
 top:
@@ -54,9 +57,38 @@ top:
 	if c = 5 then
 		GoSub PrintStatus
 		
+		battVolts = getvalue(_VOLTS, 2) 'this voltage will decay if ESTOP is off and we command motor
+		mot1Cmd = getvalue(_MOTCMD, 1) 'Not as extensible as the nice code from Clearpath but we don't need it to be
+		mot2Cmd = getvalue(_MOTCMD, 2)
+		
+		faults = getvalue(_FLTFLAG, 1)
+		faults = faults << 1 'Right shift 1 bit to eliminate last bit
+		mosfetFailure = faults >> 7 'Attempt to leave only MostFet failure
+		
+		if battVolts < 210 and mot1Cmd = 0 and mot2Cmd = 0 then
+			if voltageCounter > 0 then voltageCounter -= 1 
+			
+			if voltageCounter = 0 then 
+				setcommand(_D0, 1) 'Will shutdown power to all modules 
+			else 
+				setcommand(_D1, 1) 'Will turn on power to all relays
+			end if 
+		
+			if mosfetFailure = true then setcommand(_D0, 2) 'Powers off Contactor		
+			
+		else
+			if voltageCounter < 150 then voltageCounter += 1 
+			setcommand(_D1, 1) 'Powers on relays 
+			
+			if mosfetFailure = false and battVolts > 235 then setcommand(_D1, 2) 'Powers on Contactor
+			if mosfetFailure = true then setcommand(_D0, 2) 'Powers off Contactor
+			
+		end if 
+								
 		c = 0
 	end if
-
+	
+	
 	wait(19)
 	goto top
 
