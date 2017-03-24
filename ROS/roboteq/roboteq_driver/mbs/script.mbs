@@ -32,7 +32,7 @@ for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
 	' Encoder, speed config (p208, p221)
 	setconfig(_EMOD, ch, ch*16 + 2)'???
 	setconfig(_EPPR, ch, 256) 'pulse per revolution for encoder 
-	setconfig(_MXRPM, ch, 1000) 'max RPM per channel 
+	setconfig(_MXRPM, ch, 500) 'max RPM per channel 
 	setconfig(_CLERD, ch, 0) ' parameter used to shut the system down due to large tracking errors
 
 	' Current limit (p216)
