@@ -14,7 +14,7 @@ ros::Publisher ch1, ch2, estop_publisher;
 
 float MAX_SPEED_RPM = 1000; //this should be set the same as what is in the roboteq mbs script 
 float WHEEL_RADIUS = 0.1651;
-float GEAR_RATIO = 18.33;
+float GEAR_RATIO = 37.03; //this is just a tuned number based on how long it took Jinx to move 10 m at 0.5 m/s
 float LEFT_OVER_RIGHT = 0.997;
 float g_pos1, g_pos2, g_vel1, g_vel2;
 
@@ -111,13 +111,9 @@ int main(int argc, char **argv)
 		v1 = std::max(-1.0f*MAX_SPEED_RPM,std::min(v1,MAX_SPEED_RPM));
 		v2 = std::max(-1.0f*MAX_SPEED_RPM,std::min(v2,MAX_SPEED_RPM));
 		
-		//Now we need to convert v1 and v2 back to the units the 
-		//roboteq driver expects to see, rad/s
+		v1 /= LEFT_OVER_RIGHT; 
+		v2 *= LEFT_OVER_RIGHT; 
 		
-		//v1*= (2*3.14159)/60;
-		//v2*= (2*3.14159)/60;
-		
-
 		roboteq_msgs::Command cmd1, cmd2;
 		cmd1.mode = 0;
 		cmd2.mode = 0;

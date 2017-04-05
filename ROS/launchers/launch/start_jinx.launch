@@ -45,9 +45,9 @@
 		<!-- separation between the two wheels in millimetres -->
 		<param name="wheelbase" value="562.5" />
 		<!-- number of encoder counts per millimetre for the left wheel -->
-		<param name="countspermmleft" value="100" />
+		<param name="countspermmleft" value="1.451" />
 		<!-- number of encoder counts per millimetre for the right wheel -->
-		<param name="countspermmright" value="100" />
+		<param name="countspermmright" value="1.443" />
 		<!-- whether to show additional info -->
 		<param name="verbose" value="true" />
 	</node>

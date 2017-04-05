@@ -8,7 +8,7 @@
  * 	Some structural content borrowed from Bob Mottram's work documented 
  *  here: http://wiki.ros.org/phidgets
  *  
- *  Additionally the diff_tf node from the differential_drive package
+ *  Additionally the d	iff_tf node from the differential_drive package
  *  documented here was referenced throughout: http://wiki.ros.org/differential_drive
  * 
  * 	Remaining work courtesy of Mike Gallagher
@@ -49,6 +49,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include "phidgets/encoder_params.h"
+#include <std_msgs/Bool.h>
 
 // used to prevent callbacks from accessing variables
 // before they are initialised
@@ -92,6 +93,10 @@ ros::Subscriber left_encoder_sub;
 ros::Subscriber right_encoder_sub;
 ros::Subscriber encoders_sub;
 
+ros::Publisher odom_reset_pub;
+
+bool g_odom_reset = false;
+
 // pose estimate
 double x = 0.0;
 double y = 0.0;
@@ -119,7 +124,7 @@ int encoder_high_wrap;
 
 // Update the left encoder count
 void update_encoder_left(int count)
-{	
+{	count = -count; //correct for sign inversion on Jinx left encoder 
 	if(count < encoder_low_wrap && left_prev_encoder > encoder_high_wrap)
 	{
 		//we wrapped around the high side, we're moving in the postive 
@@ -157,6 +162,7 @@ void update_encoder_left(int count)
 // Update the right encoder count
 void update_encoder_right(int count)
 {
+	
     if(count < encoder_low_wrap && left_prev_encoder > encoder_high_wrap)
 	{
 		//we wrapped around the high side, we're moving in the postive 
@@ -206,6 +212,12 @@ void rightEncoderCallback(const std_msgs::Int32& message_holder)
 {
     right_encoder_count = message_holder.data;  
     //ROS_INFO("Right encoder count received by odometry node %i: ", right_encoder_count); 
+    
+}
+
+void odomResetCallback(const std_msgs::Bool& message_holder)
+{
+    g_odom_reset = message_holder.data;  
     
 }
 
@@ -276,8 +288,8 @@ void update_position_orientation_velocity(
 		if (std::fabs(D) > 0.000001)
 		{
 			// calculate distance traveled in x and y
-			local_x = cos(local_theta) * D; 
-			local_y = -sin(local_theta) * D; 
+			local_x = -cos(local_theta) * D; 
+			local_y = sin(local_theta) * D; 
 			// calculate the final position of the robot
 			x = x + ( cos(theta) * local_x - sin(theta) * local_y); 
 			y = y + ( sin(theta) * local_x + cos(theta) * local_y); 
@@ -308,18 +320,19 @@ int main(int argc, char** argv)
 	std::string name = "odom";
 	nh.getParam("name", name);
 
-	std::string reset_topic = "odometry/reset";
-	nh.getParam("reset_topic", reset_topic);
-
 	nh.getParam("rotation", rotation_offset);
 		
 	encoder_low_wrap= 0.3 * (encoder_max - encoder_min) + encoder_min; 
 	encoder_high_wrap= 0.7 * (encoder_max - encoder_min) + encoder_min; 
 
-	n.setParam(reset_topic, false);
-
 	ros::Publisher odom_pub =
 		n.advertise<nav_msgs::Odometry>(name, 50);
+		
+	odom_reset_pub = n.advertise<std_msgs::Bool>("odom_reset", 1);	
+	
+	ros::Subscriber odom_reset_sub= 
+	n.subscribe("odom_reset",1,odomResetCallback); 
+		
 	tf::TransformBroadcaster odom_broadcaster;
 
 	int direction = -1;
@@ -373,16 +386,22 @@ int main(int argc, char** argv)
 		ros::Rate update_rate(frequency);
 		while(ros::ok()){
 			// reset the pose
-			bool reset = false;
-			n.getParam(reset_topic, reset);
-			if (reset) {
+			
+			if (g_odom_reset) {
 				x = 0;
 				y = 0;
 				theta = 0;
 				vx = 0;
 				vy = 0;
 				vtheta = 0;
-				n.setParam(reset_topic, false);
+				
+				std_msgs::Bool reset; 
+				reset.data = false; 
+				
+				//could update g_odom_reset here but might as well wait
+				//until it is updated by the topic. 
+				
+				odom_reset_pub.publish(reset);
 				start_encoder_count_left = 0;
 				start_encoder_count_right = 0;
 			}
