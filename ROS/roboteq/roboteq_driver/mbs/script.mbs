@@ -3,7 +3,7 @@ MAX_CHANNELS=2
 Dim last_mode[2] as Integer
 Dim mosfetFailure As Boolean
 Dim voltageCounter As Integer
-voltageCounter = 250 'Start counters for voltage counter
+voltageCounter = 3000 'Start counters for voltage counter
 
 ' Mode values are:
 '  -1 stopped
@@ -32,7 +32,7 @@ for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
 	' Encoder, speed config (p208, p221)
 	setconfig(_EMOD, ch, ch*16 + 2)'???
 	setconfig(_EPPR, ch, 256) 'pulse per revolution for encoder 
-	setconfig(_MXRPM, ch, 500) 'max RPM per channel 
+	setconfig(_MXRPM, ch, 450) 'max RPM per channel 
 	setconfig(_CLERD, ch, 0) ' parameter used to shut the system down due to large tracking errors
 
 	' Current limit (p216)
@@ -42,13 +42,46 @@ for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
 	setconfig(_ATRIG, ch, 600) ' max amps rating in datasheet 
 
 	' Max acceleration/deceleration (p219)
-	setconfig(_MAC, ch, 5000) 'max acceleration limits * 10
-	setconfig(_MDEC, ch, 5000) 'max deceleration limits * 10
+	setconfig(_MAC, ch, 1500) 'max acceleration limits * 10
+	setconfig(_MDEC, ch, 4500) 'max deceleration limits * 10
 next
 
 top:
+	if getvalue(_VAR, 1) = -1 then
+				setconfig(_MMOD, 1, 1)
+				setconfig(_KP, 1, 0)
+				setconfig(_KI, 1, 0)
+				setconfig(_KD, 1, 0)
+				setconfig(_ICAP, 1, 0)
+				setcommand(_G, 1, 0)
+				
+				setconfig(_MMOD, 2, 1)
+				setconfig(_KP, 2, 0)
+				setconfig(_KI, 2, 0)
+				setconfig(_KD, 2, 0)
+				setconfig(_ICAP, 2, 0)
+				setcommand(_G, 2, 0)
+	end if
+	
+	' Motor in velocity-control mode.
+	if getvalue(_VAR, 1) = 0 then
+		setconfig(_MMOD, 1, 1)
+		setconfig(_KP, 1, 5)
+		setconfig(_KI, 1, 50)
+		setconfig(_KD, 1, 00)
+		setconfig(_ICAP, 1, 100)
+		
+		setconfig(_MMOD, 2, 1)
+		setconfig(_KP, 2, 5)
+		setconfig(_KI, 2, 50)
+		setconfig(_KD, 2, 00)
+		setconfig(_ICAP, 2, 100)
+	end if
+	
+	
+	
 	for ch = 1 andwhile ch <= MAX_CHANNELS evaluate ch++
-		' Send feedback for this channel at 25Hz.
+		' Send feedback for this channel at 25H		
 		GoSub PrintFeedback
 	next
 
@@ -65,7 +98,7 @@ top:
 		faults = faults << 1 'Right shift 1 bit to eliminate last bit
 		mosfetFailure = faults >> 7 'Attempt to leave only MostFet failure
 		
-		if battVolts < 210 and mot1Cmd = 0 and mot2Cmd = 0 then
+		if battVolts < 205 and mot1Cmd = 0 and mot2Cmd = 0 then
 			if voltageCounter > 0 then voltageCounter -= 1 
 			
 			if voltageCounter = 0 then 
@@ -77,10 +110,10 @@ top:
 			if mosfetFailure = true then setcommand(_D0, 2) 'Powers off Contactor		
 			
 		else
-			if voltageCounter < 150 then voltageCounter += 1 
+			if voltageCounter < 3000 then voltageCounter += 1 
 			setcommand(_D1, 1) 'Powers on relays 
 			
-			if mosfetFailure = false and battVolts > 235 then setcommand(_D1, 2) 'Powers on Contactor
+			if mosfetFailure = false and battVolts > 215 then setcommand(_D1, 2) 'Powers on Contactor
 			if mosfetFailure = true then setcommand(_D0, 2) 'Powers off Contactor
 			
 		end if 
