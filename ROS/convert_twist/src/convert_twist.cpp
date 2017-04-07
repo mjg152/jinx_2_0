@@ -113,15 +113,29 @@ int main(int argc, char **argv)
 		
 		v1 /= LEFT_OVER_RIGHT; 
 		v2 *= LEFT_OVER_RIGHT; 
+		if (g_dig1_status)
+		{
 		
-		roboteq_msgs::Command cmd1, cmd2;
-		cmd1.mode = 0;
-		cmd2.mode = 0;
-		cmd1.setpoint = v1;
-		cmd2.setpoint = v2;
+			roboteq_msgs::Command cmd1, cmd2;
+			cmd1.mode = 0;
+			cmd2.mode = 0;
+			cmd1.setpoint = v1;
+			cmd2.setpoint = v2;
 
-		ch1.publish(cmd1);
-		ch2.publish(cmd2);
+			ch1.publish(cmd1);
+			ch2.publish(cmd2);
+		}
+		else 
+		{
+			roboteq_msgs::Command cmd1, cmd2;
+			cmd1.mode = -1;
+			cmd2.mode = -1;
+			cmd1.setpoint = 0;
+			cmd2.setpoint = 0;
+
+			ch1.publish(cmd1);
+			ch2.publish(cmd2);
+		}
 
 	}
 	return 0;

@@ -79,7 +79,14 @@ void Channel::cmdCallback(const roboteq_msgs::Command& command)
   }
   else
   {
-    ROS_WARN_STREAM("Command received with unknown mode number, dropping.");
+	static int counter = 0; 
+	counter++; 
+	if (counter == 500)
+	{  
+		ROS_WARN_STREAM("Manual Mode Enabled. Check the ROS / Manual Switch!");
+		counter = 0; 
+	} 
+		
   }
 
   controller_->flush();
