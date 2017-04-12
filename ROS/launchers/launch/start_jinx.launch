@@ -32,7 +32,6 @@
 
   <!-- Kinect -->
   
-	<remap from="/camera/depth_registered/points" to="/kinect/depth/points" />
 	<include file="$(find freenect_launch)/launch/freenect.launch" />
 
   <!-- odometry -->
