@@ -124,7 +124,7 @@ int encoder_high_wrap;
 
 // Update the left encoder count
 void update_encoder_left(int count)
-{	count = -count; //correct for sign inversion on Jinx left encoder 
+{	
 	if(count < encoder_low_wrap && left_prev_encoder > encoder_high_wrap)
 	{
 		//we wrapped around the high side, we're moving in the postive 
@@ -152,7 +152,7 @@ void update_encoder_left(int count)
 	
 	else 
 	{
-		left_encoder_diff = left_prev_encoder - count; 
+		left_encoder_diff = count- left_prev_encoder; 
 	}
 	
 	left_prev_encoder = count; 
@@ -190,7 +190,7 @@ void update_encoder_right(int count)
 	
 	else 
 	{
-		right_encoder_diff = right_prev_encoder - count; 
+		right_encoder_diff = count-right_prev_encoder; 
 	}
 	
 	//Update our previous encoder count 
@@ -281,25 +281,20 @@ void update_position_orientation_velocity(
 			right_encoder_counts_per_mm;
 			
 		const double mm_to_m = 1.0 / 1000; 
+				double local_theta = (dist_right_mm - dist_left_mm) / wheelbase_mm ; 
 
+        theta += local_theta; 
 		D = (dist_right_mm + dist_left_mm) * 0.5*mm_to_m;  
-		double local_theta = (dist_right_mm - dist_left_mm) / wheelbase_mm ; 
 
-		if (std::fabs(D) > 0.000001)
-		{
-			// calculate distance traveled in x and y
-			local_x = -cos(local_theta) * D; 
-			local_y = sin(local_theta) * D; 
-			// calculate the final position of the robot
-			x = x + ( cos(theta) * local_x - sin(theta) * local_y); 
-			y = y + ( sin(theta) * local_x + cos(theta) * local_y); 
-			
-		}
-		if(std::fabs(local_theta) > 0.0001)
-		{
-			theta = theta + local_theta; 
-		}
 		
+		// calculate distance traveled in x and y
+		local_x = cos(theta) * D; 
+		local_y = sin(theta) * D; 
+		// calculate the final position of the robot
+		x += local_x; 
+		y += local_y; 
+			
+	
 		vD = D / dt; 
 		vtheta = local_theta / dt; 
 		vx=local_x / dt; 
@@ -374,7 +369,7 @@ int main(int argc, char** argv)
 		nh.getParam("verbose", verbose);
 		nh.setParam("verbose", false);
 
-		double frequency = 22;
+		double frequency = 100;
 		nh.getParam("frequency", frequency);
 
 		ros::Time current_time, last_time;

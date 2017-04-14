@@ -27,9 +27,11 @@
 	<node name = "encoder_publisher" pkg = "phidgets" type = "encoder"/>
   
   <!-- static transforms  -->
-	<node pkg="tf" type="static_transform_publisher" name="base_laser1_broadcaster" args="0.2159 0 0.53975 0 0 0 base base_laser1_link 100" />
+	<node pkg="tf" type="static_transform_publisher" name="base_laser1_broadcaster" args="0.2159 0 0.53975 0 0 0 1 base_link base_laser1_link 10" />
 	<node name="from_torso_to_camera_link_static_tf" pkg="tf" type="static_transform_publisher" args="0.217 -0.015 0.813 0.015 0.638 0.009 0.770 base camera_link 50" /> 
-
+	<node pkg="tf" type="static_transform_publisher" name="base_to_base_link_transform" args="0 0 0.8763 0 0 0 1 base_link base 100" />
+	
+  
   <!-- Kinect -->
   
 	<include file="$(find freenect_launch)/launch/freenect.launch" />

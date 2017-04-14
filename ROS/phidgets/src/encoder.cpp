@@ -123,7 +123,7 @@ int CCONV PositionChangeHandler(CPhidgetEncoderHandle ENC, void *usrptr, int Ind
 		e.time = Time;
 		
 		
-		pub_position.data=Position; 
+		pub_position.data=-Position; 
 		
 		encoder_0.publish(pub_position);
 	}
