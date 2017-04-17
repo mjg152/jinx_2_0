@@ -87,8 +87,8 @@ int main(int argc, char **argv)
 		//Our Z commands. Convert to meter's per second on the angular 
 		//Velocity before adding. 
 		
-		v2 += (g_last_received_cmd.angular.z)*WHEEL_RADIUS;
-		v1 -= (g_last_received_cmd.angular.z)*WHEEL_RADIUS;
+		v2 -= (g_last_received_cmd.angular.z)*WHEEL_RADIUS;
+		v1 += (g_last_received_cmd.angular.z)*WHEEL_RADIUS;
 
 		//Our final command is generated as a ratio of our maximum allowed RPM, so we need 
 		//to back out our base_radius so convert from m/s to rotations per second
