@@ -393,7 +393,7 @@ configure:12191: found /sbin/ldconfig
 configure:12204: result: /sbin/ldconfig
 configure:12214: checking for library containing dlopen
 configure:12245: gcc -o conftest -g -O2   conftest.c  >&5
-/tmp/cc4QQxTT.o: In function `main':
+/tmp/ccTawt3d.o: In function `main':
 /home/user/ros_ws/src/jinx_2_0/ROS/libphidgets/build/libphidget-2.1.8.20151217/conftest.c:34: undefined reference to `dlopen'
 collect2: error: ld returned 1 exit status
 configure:12245: $? = 1
@@ -443,7 +443,7 @@ configure:12303: gcc -o conftest -g -O2   conftest.c -ldl  >&5
 conftest.c:30:6: warning: conflicting types for built-in function 'sqrt' [enabled by default]
  char sqrt ();
       ^
-/tmp/ccXyedJX.o: In function `main':
+/tmp/ccZ2eu0g.o: In function `main':
 /home/user/ros_ws/src/jinx_2_0/ROS/libphidgets/build/libphidget-2.1.8.20151217/conftest.c:34: undefined reference to `sqrt'
 collect2: error: ld returned 1 exit status
 configure:12303: $? = 1
@@ -493,7 +493,7 @@ configure:12303: $? = 0
 configure:12320: result: -lm
 configure:12330: checking for library containing pthread_join
 configure:12361: gcc -o conftest -g -O2   conftest.c -lm -ldl  >&5
-/tmp/ccqcpM44.o: In function `main':
+/tmp/ccl3QETo.o: In function `main':
 /home/user/ros_ws/src/jinx_2_0/ROS/libphidgets/build/libphidget-2.1.8.20151217/conftest.c:34: undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
 configure:12361: $? = 1
@@ -544,7 +544,7 @@ configure:12421: $? = 0
 configure:12438: result: none required
 configure:12637: checking for library containing libusb_init
 configure:12668: gcc -o conftest -g -O2   conftest.c -lpthread -lm -ldl  >&5
-/tmp/ccFxrCZg.o: In function `main':
+/tmp/cc2JFq2o.o: In function `main':
 /home/user/ros_ws/src/jinx_2_0/ROS/libphidgets/build/libphidget-2.1.8.20151217/conftest.c:34: undefined reference to `libusb_init'
 collect2: error: ld returned 1 exit status
 configure:12668: $? = 1
