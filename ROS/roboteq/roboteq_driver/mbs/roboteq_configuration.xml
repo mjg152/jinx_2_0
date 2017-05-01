@@ -66,7 +66,7 @@
             <Nodes>
               <Node Text="USB/RS232 Safety">
                 <Nodes>
-                  <Node Text="Watchdog (ms)" Value="110">
+                  <Node Text="Watchdog (ms)" Value="500">
                     <Nodes />
                   </Node>
                 </Nodes>
@@ -773,13 +773,13 @@
           </Node>
           <Node Text="Speed &amp;amp; Acceleration">
             <Nodes>
-              <Node Text="Max Speed (RPM)" Value="500">
+              <Node Text="Max Speed (RPM)" Value="450">
                 <Nodes />
               </Node>
-              <Node Text="Acceleration (RPM/s)" Value="5000">
+              <Node Text="Acceleration (RPM/s)" Value="1500">
                 <Nodes />
               </Node>
-              <Node Text="Decceleration (RPM/s)" Value="5000">
+              <Node Text="Decceleration (RPM/s)" Value="4500">
                 <Nodes />
               </Node>
             </Nodes>
@@ -795,7 +795,7 @@
               <Node Text="Turns Min to Max" Value="3906">
                 <Nodes />
               </Node>
-              <Node Text="Proportional Gain" Value="10">
+              <Node Text="Proportional Gain" Value="5">
                 <Nodes />
               </Node>
               <Node Text="Integral Gain" Value="50">
@@ -804,7 +804,7 @@
               <Node Text="Differential Gain" Value="0">
                 <Nodes />
               </Node>
-              <Node Text="Integrator Limit (%)" Value="88">
+              <Node Text="Integrator Limit (%)" Value="100">
                 <Nodes />
               </Node>
               <Node Text="Loop Error Detection" Value="0">
@@ -854,13 +854,13 @@
           </Node>
           <Node Text="Speed &amp;amp; Acceleration">
             <Nodes>
-              <Node Text="Max Speed (RPM)" Value="500">
+              <Node Text="Max Speed (RPM)" Value="450">
                 <Nodes />
               </Node>
-              <Node Text="Acceleration (RPM/s)" Value="5000">
+              <Node Text="Acceleration (RPM/s)" Value="1500">
                 <Nodes />
               </Node>
-              <Node Text="Decceleration (RPM/s)" Value="5000">
+              <Node Text="Decceleration (RPM/s)" Value="4500">
                 <Nodes />
               </Node>
             </Nodes>
@@ -876,7 +876,7 @@
               <Node Text="Position Turns Min to Max" Value="3906">
                 <Nodes />
               </Node>
-              <Node Text="Proportional Gain" Value="10">
+              <Node Text="Proportional Gain" Value="5">
                 <Nodes />
               </Node>
               <Node Text="Integral Gain" Value="50">
@@ -885,7 +885,7 @@
               <Node Text="Differential Gain" Value="0">
                 <Nodes />
               </Node>
-              <Node Text="Integrator Limit (%)" Value="88">
+              <Node Text="Integrator Limit (%)" Value="100">
                 <Nodes />
               </Node>
               <Node Text="Loop Error Detection" Value="0">
