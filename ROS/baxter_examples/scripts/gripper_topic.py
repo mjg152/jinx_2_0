@@ -44,24 +44,26 @@ from std_msgs.msg import Bool
 
 def callback(data):
 	closeGripper = data.data
-	
 	left = baxter_interface.Gripper('left', CHECK_VERSION)
 	right = baxter_interface.Gripper('right', CHECK_VERSION)
-	
+	print("in callback") 
 	bindings = {
     #   key: (function, args, description)
+        'C': (right.calibrate, [], "right: calibrate"),
         'c': (left.calibrate, [], "left: calibrate"),
         'q': (left.close, [], "left: close"),
+        'Q': (right.close, [], "right: close"),
         'w': (left.open, [], "left: open"),
+        'W': (right.open, [], "right: open"),
     }	
 
 	if closeGripper:
-		c = 'q'
+		c = 'Q'
 		cmd = bindings[c]
 		cmd[0](*cmd[1])
 		print("command: %s" % (cmd[2],))
 	else:
-		c = 'w'
+		c = 'W'
 		cmd = bindings[c]
 		cmd[0](*cmd[1])
 		print("command: %s" % (cmd[2],))
@@ -100,9 +102,12 @@ See help inside the example with the '?' key for key bindings.
     
     bindings = {
     #   key: (function, args, description)
+        'C': (right.calibrate, [], "right: calibrate"),
         'c': (left.calibrate, [], "left: calibrate"),
         'q': (left.close, [], "left: close"),
+        'Q': (right.close, [], "right: close"),
         'w': (left.open, [], "left: open"),
+        'W': (right.open, [], "right: open"),
     }
     
 
@@ -156,7 +161,7 @@ See help inside the example with the '?' key for key bindings.
 	print("Enabling robot... ")
     rs.enable()
     
-    c = 'c'
+    c = 'C'
     cmd = bindings[c]
     cmd[0](*cmd[1])
     print("we tried to calibrate gripper, cmd: %s" % (cmd[2],))    
